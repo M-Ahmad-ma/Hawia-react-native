@@ -1,0 +1,18 @@
+{
+  "find_reliable_hawias": "Find reliable hawias for rent",
+  "choose_nearby": "Choose nearby companies and connect with them directly.",
+  "explore_companies": "Explore Companies",
+  "register_company": "Register Company",
+  "search_companies": "Search companies...",
+  "available_hawias": "Available hawias",
+  "tanker_small": "Small",
+  "tanker_medium": "Medium",
+  "tanker_large": "Large",
+  "order_now": "Order Now",
+  "no_hawias": "No hawias available",
+  "contact_us": "contact us via whatsapp",
+  "confirm": "confirm",
+  "cancel": "cancel",
+  "loading_companies": "Loading companies...",
+  "error_loading": "Error loading companies."
+}

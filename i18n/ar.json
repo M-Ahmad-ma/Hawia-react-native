@@ -1,0 +1,20 @@
+
+{
+  "find_reliable_hawias": "ابحث عن حوايات موثوقة للإيجار",
+  "choose_nearby": "اختر الشركات القريبة وتواصل معها مباشرةً",
+  "explore_companies": "استكشف الشركات",
+  "register_company": "تسجيل شركة",
+  "search_companies": "ابحث عن الشركات...",
+  "available_hawias": "الحوايات المتاحة",
+  "tanker_small": "صغير",
+  "tanker_medium": "متوسط",
+  "tanker_large": "كبير",
+  "order_now": "اطلب الآن",
+  "no_hawias": "لا توجد حوايات متاحة",
+  "contact_us": "تواصل معنا عبر واتساب",
+  "confirm": "تأكيد",
+  "cancel": "إلغاء",
+  "loading_companies": "جاري تحميل الشركات...",
+  "error_loading": "حدث خطأ أثناء تحميل الشركات."
+}
+

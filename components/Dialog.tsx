@@ -46,7 +46,7 @@ export default function Dialog({
         className="flex-1 justify-center items-center bg-black/50 px-4"
       >
         <View
-          className="bg-white w-80 rounded-2xl p-3 shadow-lg"
+          className="bg-white w-80 rounded-2xl px-4 py-4 shadow-lg"
           style={containerStyle}
         >
           {title ? (
@@ -62,7 +62,7 @@ export default function Dialog({
           {children}
 
           {showActions && (
-            <View className="flex-row justify-end space-x-3 mt-4">
+            <View className="flex-row justify-end gap-2 space-x-3 mt-2">
               <TouchableOpacity
                 onPress={onClose}
                 className="px-4 py-2 rounded-lg bg-gray-200"
