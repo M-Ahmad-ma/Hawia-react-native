@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 type DialogProps = {
   visible: boolean;
@@ -27,13 +28,15 @@ export default function Dialog({
   onClose,
   title,
   message,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  confirmText,
+  cancelText,
   onConfirm,
   showActions = true,
   containerStyle,
   children,
 }: DialogProps) {
+  const { t } = useTranslation();
+
   return (
     <Modal
       transparent
@@ -62,12 +65,14 @@ export default function Dialog({
           {children}
 
           {showActions && (
-            <View className="flex-row justify-end gap-2 space-x-3 mt-2">
+            <View className="flex-row justify-end gap-2 mt-2">
               <TouchableOpacity
                 onPress={onClose}
                 className="px-4 py-2 rounded-lg bg-gray-200"
               >
-                <Text className="text-gray-700 font-medium">{cancelText}</Text>
+                <Text className="text-gray-700 font-medium">
+                  {cancelText || t('cancel')}
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -75,9 +80,11 @@ export default function Dialog({
                   onConfirm?.();
                   onClose();
                 }}
-                className="px-4 py-2 rounded-lg bg-indigo-600"
+                className="px-4 py-2 rounded-lg bg-[#FF8C42]"
               >
-                <Text className="text-white font-medium">{confirmText}</Text>
+                <Text className="text-white font-medium">
+                  {confirmText || t('confirm')}
+                </Text>
               </TouchableOpacity>
             </View>
           )}

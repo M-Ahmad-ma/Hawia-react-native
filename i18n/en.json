@@ -1,4 +1,11 @@
 {
+    "owner_location": "Saudi Arabia",
+    "tabs_home": "home",
+    "tabs_contact": "contact",
+    "tabs_terms": "terms",
+    "tabs_about": "about",
+    "owner_about_description": "We are a smart platform that connects you with the best Hawia service providers in your city—quickly and effortlessly. We save you time and effort by offering reliable options, competitive pricing, and instant service",
+    "owner_about_title": "About Company",
   "find_reliable_hawias": "Find reliable hawias for rent",
   "choose_nearby": "Choose nearby companies and connect with them directly.",
   "explore_companies": "Explore Companies",
@@ -11,8 +18,54 @@
   "order_now": "Order Now",
   "no_hawias": "No hawias available",
   "contact_us": "contact us via whatsapp",
+  "register_company_title": "Register your company",
   "confirm": "confirm",
   "cancel": "cancel",
   "loading_companies": "Loading companies...",
-  "error_loading": "Error loading companies."
+  "error_loading": "Error loading companies.",
+  "all_cities": "All Cities",
+  "welcome": "Welcome",
+  "last_updated": "Last updated:",
+  "all_rights_reserved": "JLaL Company © All rights reserved",
+  "terms": {
+    "title": "Terms and Conditions - Hawia Platform",
+    "content": "Welcome to Hawia Platform.\n\nBy using this website or service, you agree to comply with these Terms and Conditions in full. If you do not agree with any part of them, please do not use the service.\n\n1. Definitions:\n- Entity: Refers to JLaL Company.\n- User: Anyone who accesses or uses the website or service.\n- Service: All services provided through Hawia Platform.\n\n2. Terms of Use:\n- The user must be 18 years of age or older.\n- The user must use the service legally and ethically.\n- Misuse of the platform, hacking attempts, or affecting performance is prohibited.\n\n3. Accounts:\n- The user is responsible for maintaining the confidentiality of their account information.\n- The entity has the right to suspend or cancel any account in case of violation of the terms.\n\n4. Booking and Confirmation:\n- Booking is made via WhatsApp communication.\n- A booking is not confirmed until approved by the entity.\n- A deposit may be required to confirm the order ensure confirmation before paying.\n- If a container is unavailable, the customer will be notified immediately.\n\n5. Rental Period:\n- The rental period starts from the delivery time.\n- Ask about delay duration and pickup of the filled Hawia.\n- Late returns will incur additional fees.\n- Any extension must be communicated to the entity in advance.\n\n6. Prices and Payment:\n- Prices are determined based on Hawia size and rental duration.\n- All prices exclude additional fees unless agreed upon.\n- Prices are subject to change without prior notice.\n- Payments are made through approved methods.\n- The entity is not responsible for errors from payment service providers.\n\n7. Customer Responsibility:\n- The customer must Maintain the Hawia and do not misuse it.\n- The customer bears the cost of any damage or loss.\n- It is prohibited to hand over or allow use of the container to another party without approval from the entity.\n- Use of the container is entirely at the customer's own responsibility.\n\n8. Intellectual Property:\n- All content (texts, images, logos, designs) belongs to Hawia Platform and may not be copied or used without written permission.\n\n9. Return and Exchange Policy:\n- According to specific terms announced on the platform or sent to the customer via WhatsApp by the entity.\n\n10. Disclaimer:\n- The service is provided as is.\n- The entity does not guarantee the service is free from errors or interruptions.\n- The entity is not liable for any direct or indirect damages resulting from use.\n\n11. Amendments:\n- The entity has the right to modify these terms at any time. Continued use constitutes acceptance of the changes.\n\n12. Legal Liability:\n- The platform is not responsible for injuries or damages caused by misuse.\n- The customer bears full responsibility during the rental period.\n\n13. Governing Law:\n- These terms are governed by the laws and regulations of Saudi Arabia.\n\n14. Contact:\nFor inquiries, contact:\nEmail: JLaL@mail.com\nPhone: 0555762617"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Reach out to us and we'll respond as soon as possible",
+    "name_placeholder": "Your Name",
+    "phone_placeholder": "Phone Number",
+    "message_placeholder": "Your Message",
+    "submit_button": "Contact via WhatsApp",
+    "whatsapp_message": "Name: {{name}}\nPhone: {{phone}}\nMessage: {{message}}",
+    "errors": {
+      "required": "Please fill in all fields",
+      "invalid_phone": "Please enter a valid phone number"
+    },
+    "owner_info": "Company Information"
+  },
+  "order": {
+    "dialog_title": "Contact us via WhatsApp",
+    "confirm": "Contact us",
+    "phone_placeholder": "Enter your phone number...",
+    "whatsapp_number_title": "Enter Your WhatsApp Number",
+    "whatsapp_placeholder": "05XXXXXXXX",
+    "please_wait": "Please wait..."
+  },
+  "tabs": {
+    "home": "Home",
+    "contact": "Contact",
+    "terms": "Terms",
+    "about": "About"
+  },
+  "owner": {
+    "company_name": "JLaL Company",
+    "about_title": "About Company",
+    "about_description": "JLaL company is a leading trading company based in Saudi Arabia, dedicated to providing exceptional services and quality products to our valued clients.",
+    "contact_info": "Contact Information",
+    "email_label": "Email",
+    "phone_label": "Phone",
+    "location": "Kingdom of Saudi Arabia"
+  }
 }

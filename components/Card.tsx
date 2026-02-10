@@ -26,13 +26,15 @@ export default function Card({ company, isTablet }: CardProps) {
 
   const handleOrder = () => setDialogVisible(true);
 
-const handleConfirm = () => {
-  handleWhatsappOrder(phoneNumber, company, 
-    () => setDialogVisible(false), 
-    () => setPhoneNumber('')
-  );
-};
-  
+  const handleConfirm = () => {
+    handleWhatsappOrder(
+      phoneNumber,
+      company,
+      () => setDialogVisible(false),
+      () => setPhoneNumber(''),
+    );
+  };
+
   const logoUrl = company.company_logo
     ? `${BASE_URL}${company.company_logo}`
     : null;
@@ -81,7 +83,7 @@ const handleConfirm = () => {
                     <Text>
                       {t(
                         TANKER_TYPE_KEYS[hawia.tanker_type] ||
-                          hawia.tanker_type,
+                        hawia.tanker_type,
                       )}
                     </Text>
                     <View className="flex-row items-center gap-1">
@@ -106,9 +108,9 @@ const handleConfirm = () => {
         <View className="absolute top-52 right-0">
           <TouchableOpacity
             onPress={handleOrder}
-            className="border-[1px] rounded-lg border-blue-400 p-2"
+            className="border-[1px] rounded-lg border-[#FF8C42] p-2"
           >
-            <Text className="text-blue-500 w-full text-center">
+            <Text className="text-[#FF8C42] w-full text-center">
               {t('order_now')}
             </Text>
           </TouchableOpacity>
@@ -118,13 +120,13 @@ const handleConfirm = () => {
       <Dialog
         visible={dialogVisible}
         onClose={() => setDialogVisible(false)}
-        title="Contact us Via WhatsApp"
-        confirmText="Contact us"
+        title={t('contact_whatsapp')}
+        confirmText={t('order_now')}
         onConfirm={handleConfirm}
       >
         <View>
           <TextInput
-            placeholder="Enter your phone number..."
+            placeholder={t('XX000...')}
             value={phoneNumber}
             onChangeText={setPhoneNumber}
             keyboardType="phone-pad"

@@ -8,13 +8,14 @@ import {
   FlatList,
   Animated,
   ActivityIndicator,
-  Dimensions,
+  Image,
 } from 'react-native';
 import {
   useNavigation,
   RouteProp,
   useRoute,
   CompositeNavigationProp,
+  CommonActions,
 } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -22,7 +23,7 @@ import { useQuery } from '@tanstack/react-query';
 import Card from '../components/Card';
 import Dialog from '../components/Dialog';
 import { filterCompanies } from '../utils/index.js';
-import { isTablet } from '../utils/istablet.ts'; // ← Add this
+import { isTablet } from '../utils/istablet.ts';
 import {
   HomeStackParamList,
   CityDrawerParamList,
@@ -30,6 +31,7 @@ import {
 import fetchList, { openChat } from '../api/index.js';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n/i18n.js';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type HomeScreenNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<HomeStackParamList, 'Home'>,
@@ -41,11 +43,18 @@ export default function HomeScreen() {
   const route = useRoute<RouteProp<HomeStackParamList, 'Home'>>();
   const { t } = useTranslation();
 
-  console.log(isTablet());
-
   const toggleLanguage = () => {
     const newLang = i18n.language === 'ar' ? 'en' : 'ar';
     i18n.changeLanguage(newLang);
+  };
+
+  const navigateToNearby = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'NearbyCompanies' }],
+      }),
+    );
   };
 
   const initialCity = route.params?.selectedCity || 'all cities';
@@ -81,11 +90,6 @@ export default function HomeScreen() {
     return [];
   }, [data]);
 
-  const cities = useMemo(() => {
-    const uniqueCities = [...new Set(companies.map(item => item.company_city))];
-    return ['all cities', ...uniqueCities.sort()];
-  }, [companies]);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchText(searchText);
@@ -97,7 +101,7 @@ export default function HomeScreen() {
     return filterCompanies(companies, selectedCity, debouncedSearchText);
   }, [companies, selectedCity, debouncedSearchText]);
 
-  const ITEMS_PER_BATCH = isTablet() ? 12 : 6; 
+  const ITEMS_PER_BATCH = isTablet() ? 12 : 6;
 
   useEffect(() => {
     const initialBatch = filteredCompanies.slice(0, ITEMS_PER_BATCH);
@@ -113,12 +117,16 @@ export default function HomeScreen() {
   }, [route.params?.selectedCity]);
 
   const loadMoreItemsSafe = () => {
-    if (!canLoadMore || loadingMore || currentIndex >= filteredCompanies.length) return;
+    if (!canLoadMore || loadingMore || currentIndex >= filteredCompanies.length)
+      return;
 
     setLoadingMore(true);
 
     setTimeout(() => {
-      const nextIndex = Math.min(currentIndex + ITEMS_PER_BATCH, filteredCompanies.length);
+      const nextIndex = Math.min(
+        currentIndex + ITEMS_PER_BATCH,
+        filteredCompanies.length,
+      );
       const newItems = filteredCompanies.slice(currentIndex, nextIndex);
 
       setVisibleCompanies(prev => [...prev, ...newItems]);
@@ -130,42 +138,58 @@ export default function HomeScreen() {
 
   const handleScroll = Animated.event(
     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-    { useNativeDriver: false }
+    { useNativeDriver: false },
   );
 
   const renderHeader = () => (
-    <Animated.View style={{ height: headerHeight }}>
+    <Animated.View style={{ height: headerHeight }} className="relative">
+      <View className="absolute top-7 left-0 right-0 z-40 px-6">
+        <View className="flex-row items-center justify-between rounded-2xl px-2 py-3 shadow-md ">
+          <Image
+            source={require('../assets/hawiaLogo.png')}
+            className="w-9 h-9"
+          />
+        </View>
+      </View>
       <ImageBackground
         source={require('../assets/bg3.jpg')}
         className="w-full justify-center items-center"
         resizeMode="cover"
       >
-        <View className="bg-black/50 w-full h-full justify-center items-center px-6">
+        <View className="bg-black/50 w-full h-full justify-center items-center px-6 pt-8">
           <Text className="text-white text-3xl max-w-[220px] font-bold mb-2 text-center">
-            {t("find_reliable_hawias")}
+            {t('find_reliable_hawia')}
           </Text>
           <Text className="text-white text-center mb-6 opacity-90 max-w-[300px]">
-            {t("choose_nearby")}
+            {t('choose_trusted_companies')}
           </Text>
 
-          <View className="flex-row gap-3 mb-8">
+          <View className="flex-row gap-3 mb-3">
             <TouchableOpacity
-              onPress={() => navigation.navigate('NearbyCompanies')}
-              className="bg-blue-600 px-6 py-3 rounded-full"
+              onPress={navigateToNearby}
+              className="bg-[#FF8C42] px-4 py-3 rounded-xl"
+              activeOpacity={0.8}
             >
-              <Text className="text-white font-semibold">{t("explore_companies")}</Text>
+              <Text className="text-white font-semibold">
+                {t('explore_companies')}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setDialogVisible(true)}
-              className="border-2 border-white px-6 py-3 rounded-full"
+              className="border-2 border-white px-3 py-3 rounded-xl active:bg-white/10"
+              activeOpacity={0.8}
             >
-              <Text className="text-white font-semibold">{t("register_company")}</Text>
+              <Text className="text-white font-semibold">
+                {t('register_company')}
+              </Text>
             </TouchableOpacity>
           </View>
 
-          <View className={(`flex-row gap-3 ${isTablet() ? 'w-[70%]' : 'w-full'}`)}>
+          <View
+            className={`flex-row gap-3  ${isTablet() ? 'w-[70%]' : 'w-full'}`}
+          >
             <TextInput
-              placeholder={t("search_companies")}
+              placeholder={t('search_companies')}
               placeholderTextColor="#9CA3AF"
               className="flex-1 bg-white px-4 py-3 rounded-xl text-base"
               value={searchText}
@@ -174,7 +198,8 @@ export default function HomeScreen() {
             />
             <TouchableOpacity
               onPress={() => navigation.openDrawer()}
-              className="bg-white px-4 py-3 rounded-xl justify-center"
+              className="bg-white px-4 py-3 rounded-xl justify-center active:bg-gray-50"
+              activeOpacity={0.8}
             >
               <Text className="font-medium text-gray-800">
                 {selectedCity === 'all cities' ? t('all_cities') : selectedCity}
@@ -209,7 +234,9 @@ export default function HomeScreen() {
       return (
         <View className="flex-1 justify-center items-center bg-gray-100">
           <ActivityIndicator size="large" color="#1F2937" />
-          <Text className="mt-4 text-gray-600 text-lg">{t('loading_companies')}</Text>
+          <Text className="mt-4 text-gray-600 text-lg">
+            {t('loading_companies')}
+          </Text>
         </View>
       );
     }
@@ -227,11 +254,15 @@ export default function HomeScreen() {
     return (
       <FlatList
         data={visibleCompanies}
-        keyExtractor={(item) => `company-${item.id}`}
+        keyExtractor={item => `company-${item.id}`}
         renderItem={({ item }) => <Card company={item} isTablet={isTablet()} />}
-        numColumns={isTablet() ? 2 : 1} 
-        key={isTablet() ? 'tablet' : 'phone'} 
-        columnWrapperStyle={isTablet() ? { justifyContent: 'space-between', paddingHorizontal: 16 } : null}
+        numColumns={isTablet() ? 2 : 1}
+        key={isTablet() ? 'tablet' : 'phone'}
+        columnWrapperStyle={
+          isTablet()
+            ? { justifyContent: 'space-between', paddingHorizontal: 16 }
+            : null
+        }
         onEndReached={loadMoreItemsSafe}
         onEndReachedThreshold={0.5}
         showsVerticalScrollIndicator={false}
@@ -246,21 +277,22 @@ export default function HomeScreen() {
   };
 
   return (
-    <View className="flex-1 bg-gray-100 relative">
+    <SafeAreaView className="flex-1 bg-gray-100 relative">
       <View className="absolute z-30 bottom-8 left-3">
         <TouchableOpacity
           onPress={toggleLanguage}
-          className="bg-blue-600 w-16 h-16 rounded-full justify-center items-center shadow-lg"
+          className="bg-[#FF8C42] w-16 h-16 rounded-full justify-center items-center shadow-lg "
           style={{
-            shadowColor: "#000",
+            shadowColor: '#000',
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 4.65,
             elevation: 8,
           }}
+          activeOpacity={0.8}
         >
           <Text className="text-white text-lg font-bold">
-            {i18n.language === "ar" ? "EN" : "AR"}
+            {i18n.language === 'ar' ? 'EN' : 'AR'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -268,12 +300,14 @@ export default function HomeScreen() {
       {renderContent()}
 
       <Dialog
-        onConfirm={() => openChat("966555762617", "I want to register my company")}
+        onConfirm={() =>
+          openChat('966555762617', 'I want to register my company')
+        }
         visible={dialogVisible}
         onClose={() => setDialogVisible(false)}
-        title={t("contact_us_whatsapp")}
-        confirmText={t("contact_us")}
+        title={t('register_company')}
+        confirmText={t('contact_us')}
       />
-    </View>
+    </SafeAreaView>
   );
 }

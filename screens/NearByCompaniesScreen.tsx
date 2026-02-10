@@ -9,19 +9,23 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import MapView, { Marker, Region } from 'react-native-maps';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DataContext from '../context/DataContext.jsx';
 import Geolocation from '@react-native-community/geolocation';
-import { RootStackParamList } from '../App';
+import { HomeStackParamList } from '../components/cityDrawerNavigator.tsx';
 
 export default function NearByCompaniesScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const { data: contextData } = useContext(DataContext);
 
   const [region, setRegion] = useState<Region | null>(null);
-  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [userLocation, setUserLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [hasCenteredOnUser, setHasCenteredOnUser] = useState(false);
   const mapRef = useRef<MapView>(null);
@@ -41,7 +45,12 @@ export default function NearByCompaniesScreen() {
     longitudeDelta: 20,
   };
 
-  const haversineDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+  const haversineDistance = (
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number,
+  ): number => {
     const toRad = (x: number) => (x * Math.PI) / 180;
     const R = 6371;
     const dLat = toRad(lat2 - lat1);
@@ -59,8 +68,12 @@ export default function NearByCompaniesScreen() {
     const requestPermission = async (): Promise<boolean> => {
       if (Platform.OS !== 'android') return true;
       try {
-        const fine = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-        const coarse = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
+        const fine = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        );
+        const coarse = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+        );
         return fine === 'granted' || coarse === 'granted';
       } catch {
         return false;
@@ -79,7 +92,7 @@ export default function NearByCompaniesScreen() {
       }
 
       watchIdRef.current = Geolocation.watchPosition(
-        (pos) => {
+        pos => {
           if (!isMounted) return;
           const { latitude, longitude, accuracy } = pos.coords;
           if (accuracy && accuracy > 500) return;
@@ -98,12 +111,12 @@ export default function NearByCompaniesScreen() {
             setHasCenteredOnUser(true);
           }
         },
-        (err) => console.warn(err),
-        { enableHighAccuracy: true, distanceFilter: 30, interval: 15000 }
+        err => console.warn(err),
+        { enableHighAccuracy: true, distanceFilter: 30, interval: 15000 },
       );
 
       Geolocation.getCurrentPosition(
-        (pos) => {
+        pos => {
           if (!isMounted || hasCenteredOnUser) return;
           const { latitude, longitude } = pos.coords;
           setUserLocation({ latitude, longitude });
@@ -122,7 +135,7 @@ export default function NearByCompaniesScreen() {
           setRegion(DEFAULT_REGION);
           setPermissionDenied(true);
         },
-        { enableHighAccuracy: true, timeout: 15000 }
+        { enableHighAccuracy: true, timeout: 15000 },
       );
     };
 
@@ -144,7 +157,14 @@ export default function NearByCompaniesScreen() {
       const lat = Number(comp.latitude);
       const lng = Number(comp.longitude);
       if (isNaN(lat) || isNaN(lng)) return false;
-      return haversineDistance(userLocation.latitude, userLocation.longitude, lat, lng) <= 100;
+      return (
+        haversineDistance(
+          userLocation.latitude,
+          userLocation.longitude,
+          lat,
+          lng,
+        ) <= 100
+      );
     });
 
     if (!hasNearby) {
@@ -169,7 +189,12 @@ export default function NearByCompaniesScreen() {
           const lat = Number(comp.latitude);
           const lng = Number(comp.longitude);
           if (isNaN(lat) || isNaN(lng)) return null;
-          const distance = haversineDistance(userLocation.latitude, userLocation.longitude, lat, lng);
+          const distance = haversineDistance(
+            userLocation.latitude,
+            userLocation.longitude,
+            lat,
+            lng,
+          );
           if (distance > 100) return null;
           return { comp, lat, lng, distance };
         })
@@ -178,10 +203,10 @@ export default function NearByCompaniesScreen() {
 
   const hasNearby = nearbyCompanies.length > 0;
 
- 
-  const companiesToDisplay = permissionDenied || !hasNearby
-    ? contextData?.data || []
-    : nearbyCompanies.map(item => item!.comp);
+  const companiesToDisplay =
+    permissionDenied || !hasNearby
+      ? contextData?.data || []
+      : nearbyCompanies.map(item => item!.comp);
 
   return (
     <View className="flex-1 bg-gray-100">
@@ -203,7 +228,7 @@ export default function NearByCompaniesScreen() {
             ? `https://hawia.sa/admin/assets/img/company-logos/${comp.company_logo}`
             : 'https://via.placeholder.com/80/cccccc/666666.png';
 
-            console.log(logoUrl)
+          console.log(logoUrl);
 
           return (
             <Marker
@@ -212,7 +237,10 @@ export default function NearByCompaniesScreen() {
               onPress={() => navigation.navigate('Details', { company: comp })}
             >
               <View className="bg-white rounded-full p-1 border-2 border-white shadow-xl">
-                <Image source={{ uri: logoUrl }} className="w-10 h-10 rounded-full" />
+                <Image
+                  source={{ uri: logoUrl }}
+                  className="w-10 h-10 rounded-full"
+                />
               </View>
             </Marker>
           );
@@ -229,20 +257,30 @@ export default function NearByCompaniesScreen() {
       </MapView>
 
       <View className="absolute top-12 left-4 right-4 bg-black/85 rounded-2xl px-4 py-4 flex-row items-center shadow-2xl">
-        <TouchableOpacity onPress={() => navigation.goBack()} className=' px-4 py-1'>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'Home' }],
+              }),
+            );
+          }}
+          className=" px-4 py-1"
+        >
           <Icon name="arrow-back" size={28} color="white" />
         </TouchableOpacity>
         <Text className="text-white text-xl font-bold flex-1 text-center -ml-6">
           {permissionDenied
             ? 'الشركات في الرياض'
             : hasNearby
-            ? 'الشركات القريبة منك'
-            : 'جميع الشركات في المملكة'}
+              ? 'الشركات القريبة منك'
+              : 'جميع الشركات في المملكة'}
         </Text>
       </View>
 
       {!permissionDenied && userLocation && !hasNearby && (
-        <View className="absolute bottom-20 left-4 right-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-5 shadow-2xl">
+        <View className="absolute bottom-20 left-4 right-4 bg-gradient-to-r from-[#FF8C42] to-orange-500 rounded-2xl p-5 shadow-2xl">
           <Text className="text-white text-center font-bold text-lg">
             لا توجد شركات قريبة (100 كم)
           </Text>
